@@ -52,9 +52,7 @@ class TrainingConfig:
             raise ValueError(f"{self.matmul_precision=} must be one of 'high', 'medium', or 'low'")
 
         if self.dist_strategy not in ["auto", "fsdp", "ddp", "ddp_spawn"]:
-            raise ValueError(
-                f"{self.dist_strategy=} must be one of 'fsdp', 'ddp', or 'ddp_spawn'"
-            )
+            raise ValueError(f"{self.dist_strategy=} must be one of 'fsdp', 'ddp', or 'ddp_spawn'")
 
         if self.gradient_clip_algorithm not in ["norm", "value"]:
             raise ValueError(f"{self.gradient_clip_algorithm=} must be one of 'norm' or 'value'")
