@@ -76,7 +76,7 @@ class ModelTrainer:
             Configured Lightning trainer
         """
         return L.Trainer(
-            default_root_dir=self.config.data_path / "training" / self.config.run_name,
+            default_root_dir=str(self.config.data_path / "training" / self.config.run_name),
             max_epochs=self.config.max_epochs,
             accelerator=self.config.accelerator,
             devices=self.config.n_devices,
@@ -140,6 +140,6 @@ class ModelTrainer:
 
         if latest_ckpt is not None:
             print(f"Loading model from {latest_ckpt}")
-            trainer.fit(lightning_model, dl_train, dl_val, ckpt_path=latest_ckpt)
+            trainer.fit(lightning_model, dl_train, dl_val, ckpt_path=str(latest_ckpt))
         else:
             trainer.fit(lightning_model, dl_train, dl_val)
