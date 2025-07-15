@@ -1,8 +1,8 @@
 from typing import Any
 
-import lightning as L
+import pytorch_lightning as L
 import torch
-from lightning.pytorch.callbacks import ModelCheckpoint, RichModelSummary
+from pytorch_lightning.callbacks import ModelCheckpoint, ModelSummary
 from torch.utils.data import DataLoader
 
 from directmultistep import helpers
@@ -67,7 +67,7 @@ class ModelTrainer:
             every_n_epochs=self.config.checkpoint_every_n_epochs,
         )
 
-        return [checkpoint_callback, RichModelSummary(max_depth=self.config.summary_depth)]
+        return [checkpoint_callback, ModelSummary(max_depth=self.config.summary_depth)]
 
     def _create_trainer(self) -> L.Trainer:
         """Create Lightning trainer.
@@ -76,7 +76,7 @@ class ModelTrainer:
             Configured Lightning trainer
         """
         return L.Trainer(
-            default_root_dir=self.config.data_path / "training" / self.config.run_name,
+            default_root_dir=str(self.config.data_path / "training" / self.config.run_name),
             max_epochs=self.config.max_epochs,
             accelerator=self.config.accelerator,
             devices=self.config.n_devices,
@@ -84,7 +84,6 @@ class ModelTrainer:
             strategy=self.config.dist_strategy,
             callbacks=self._setup_callbacks(),
             gradient_clip_val=self.config.gradient_clip_val,
-            gradient_clip_algorithm=self.config.gradient_clip_algorithm,
         )
 
     def _create_dataloaders(
@@ -141,6 +140,6 @@ class ModelTrainer:
 
         if latest_ckpt is not None:
             print(f"Loading model from {latest_ckpt}")
-            trainer.fit(lightning_model, dl_train, dl_val, ckpt_path=latest_ckpt)
+            trainer.fit(lightning_model, dl_train, dl_val, ckpt_path=str(latest_ckpt))
         else:
             trainer.fit(lightning_model, dl_train, dl_val)

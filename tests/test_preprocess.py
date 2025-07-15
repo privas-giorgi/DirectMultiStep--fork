@@ -30,12 +30,12 @@ test_filtering_and_depth = [
 
 
 @pytest.mark.parametrize("data, _", test_filtering_and_depth)
-def test_filter_mol_nodes(data, _):
+def test_filter_mol_nodes(data, _) -> None:
     for item in data:
         assert filter_mol_nodes(item["paRoute"]) == item["filtered"]
 
 
-def test_filter_mol_nodes_invalid_type():
+def test_filter_mol_nodes_invalid_type() -> None:
     node = {
         "smiles": "COC(=O)c1ccc2c(c1)OCCO2",
         "children": [{"smiles": "BrCCBr"}, {"smiles": "COC(=O)c1ccc(O)c(O)c1"}],
@@ -47,7 +47,7 @@ def test_filter_mol_nodes_invalid_type():
 
 
 @pytest.mark.parametrize("data, expected_depth", test_filtering_and_depth)
-def test_max_tree_depth(data, expected_depth):
+def test_max_tree_depth(data, expected_depth) -> None:
     for item in data:
         assert max_tree_depth(item["filtered"]) == expected_depth
 
@@ -61,35 +61,35 @@ test_leaves = [
 
 
 @pytest.mark.parametrize("data", test_leaves)
-def test_find_leaves(data):
+def test_find_leaves(data) -> None:
     for item in data:
         assert find_leaves(item["filtered"]) == item["leaves"]
 
 
 @pytest.mark.parametrize("data", test9_tknz_smiles)
-def test_tokenize_smile(data):
+def test_tokenize_smile(data) -> None:
     assert tokenize_smile(data[0]) == data[1]
 
 
 @pytest.mark.parametrize("data", test10_tknz_path)
-def test_tokenize_path(data):
+def test_tokenize_path(data) -> None:
     assert tokenize_path_string(data[0]) == data[1]
 
 
-def test_generate_permutations_no_children():
+def test_generate_permutations_no_children() -> None:
     # Test data with no children
     data = {"smiles": "A"}
     assert generate_permutations(data) == [str(data).replace(" ", "")]
 
 
-def test_generate_permutations_single_child():
+def test_generate_permutations_single_child() -> None:
     # Test data with one child
     data = {"smiles": "A", "children": [{"smiles": "B"}]}
     expected_output = [str(data).replace(" ", "")]
     assert generate_permutations(data) == expected_output
 
 
-def test_generate_permutations_multiple_children():
+def test_generate_permutations_multiple_children() -> None:
     # Test data with multiple children
     data = {"smiles": "A", "children": [{"smiles": "B"}, {"smiles": "C"}]}
     expected_output = [
@@ -99,7 +99,7 @@ def test_generate_permutations_multiple_children():
     assert sorted(generate_permutations(data)) == sorted(expected_output)
 
 
-def test_generate_permutations_nested_children():
+def test_generate_permutations_nested_children() -> None:
     # Test data with nested children
     data = {"smiles": "A", "children": [{"smiles": "B", "children": [{"smiles": "C"}]}]}
     expected_output = [
@@ -113,7 +113,7 @@ def test_generate_permutations_nested_children():
     assert generate_permutations(data) == expected_output
 
 
-def test_generate_permutations_with_limit():
+def test_generate_permutations_with_limit() -> None:
     # Test data with a permutation limit
     data = {
         "smiles": "A",
@@ -124,7 +124,7 @@ def test_generate_permutations_with_limit():
     assert len(results) == 2
 
 
-def test_generate_permutations_complex_case():
+def test_generate_permutations_complex_case() -> None:
     # More complex structure with depth and multiple children at different levels
     data = {
         "smiles": "A",
@@ -148,7 +148,7 @@ def test_generate_permutations_complex_case():
         ),
     ],
 )
-def test_generate_permutations_parametrized(data, expected):
+def test_generate_permutations_parametrized(data, expected) -> None:
     assert generate_permutations(data) == expected
 
 
